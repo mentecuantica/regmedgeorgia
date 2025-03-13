@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RegMed Georgia - Калькулятор стоимости</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .pricing-card {
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .telegram-button {
+            background: linear-gradient(45deg, #0088cc, #0099ff);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .telegram-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.3);
+        }
+
+        .checkbox-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid #4F46E5;
+            border-radius: 4px;
+            margin-right: 0.75rem;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .checkbox-custom::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #4F46E5;
+            transform: scale(0);
+            transition: transform 0.2s ease;
+        }
+
+        .checkbox-input:checked + .checkbox-custom::after {
+            transform: scale(1);
+        }
+
+        .checkbox-input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .checkbox-label:hover {
+            background-color: rgba(79, 70, 229, 0.1);
+        }
+
+        .language-pill {
+            display: inline-flex;
+            align-items: center;
+            background-color: #EEF2FF;
+            color: #4338CA;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .language-pill:hover {
+            background-color: #E0E7FF;
+        }
+
+        .language-pill.active {
+            background-color: #4F46E5;
+            color: white;
+        }
+
+        .checkmark {
+            width: 8px;
+            height: 16px;
+            border-right: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(45deg);
+            margin-top: -4px;
+            margin-left: 5px;
+        }
+
+        #floating-ui {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 320px;
+            max-width: calc(100vw - 2rem);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+<!-- Header -->
+<header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+    <div class="container mx-auto px-4 py-12">
+        <nav class="flex justify-between items-center mb-12">
+            <div class="flex items-center">
+                <span class="text-2xl font-bold">RegMed Georgia</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#services" class="hover:text-indigo-200 transition-colors">Услуги</a>
+                <a href="#calculator" class="hover:text-indigo-200 transition-colors">Калькулятор</a>
+                <a href="#contact" class="hover:text-indigo-200 transition-colors">Контакты</a>
+            </div>
+            <a href="https://t.me/amoraroma" target="_blank"
+               class="telegram-button px-4 py-2 rounded-lg font-medium flex items-center">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.06-.2-.08-.06-.19-.04-.27-.02-.12.02-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.47-.81-.26-1.45-.4-1.4-.85.03-.22.45-.45 1.26-.68 4.93-2.15 8.24-3.57 9.95-4.26.84-.35 2.43-1.05 2.77-1.05.08 0 .25.02.36.12.1.08.12.22.13.31 0 .06.01.12 0 .17z"/>
+                </svg>
+                <span class="ml-2">Написать нам</span>
+            </a>
+        </nav>
+
+        <div class="flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">Разработка сайта для вашей клиники</h1>
+                <p class="text-xl mb-8 text-indigo-100">Создадим современный медицинский портал с учетом ваших
+                    потребностей и бюджета</p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#calculator"
+                       class="bg-white text-indigo-600 hover:bg-indigo-50 px-8 py-3 rounded-lg font-medium shadow-lg transition-all text-center">Рассчитать
+                        стоимость</a>
+                    <a href="#services"
+                       class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-indigo-600 px-8 py-3 rounded-lg font-medium transition-all text-center">Узнать
+                        больше</a>
+                </div>
+            </div>
+            <iframe
+                    width="600"
+                    height="400"
+                    src="https://www.youtube.com/embed/qSGdn3RXrT4"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                    class="rounded-lg shadow-2xl">
+            </iframe>
+        </div>
+
+    </div>
+    </div>
+</header>
+
+<!-- Base Services Section -->
+<section id="services" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Базовая разработка</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Мы предлагаем полный комплекс услуг для создания
+                функционального медицинского сайта</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <div class="pricing-card bg-white rounded-xl shadow-lg p-6">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm0 2h12v7H4V5zm0 9v1h12v-1H4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-2xl mb-2">Дизайн</h3>
+                    <p class="text-gray-600">Создание уникальных макетов страниц</p>
+                </div>
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-indigo-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        UI/UX дизайн
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-indigo-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        Прототипирование
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-indigo-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        Брендирование
+                    </li>
+                </ul>
+                <div class="text-center font-bold text-2xl">150 000 ₽</div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="pricing-card bg-white rounded-xl shadow-lg p-6">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-2xl mb-2">Front-End</h3>
+                    <p class="text-gray-600">Верстка с адаптивностью под разные устройства</p>
+                </div>
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-indigo-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        Адаптивная верстка
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-indigo-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        Интерактивные элементы
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-indigo-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        Оптимизация скорости
+                    </li>
+                </ul>
+                <div class="text-center font-bold text-2xl">100 000 ₽</div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="pricing-card bg-white rounded-xl shadow-lg p-6">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L7.586 10 5.293 7.707a1 1 0 010-1.414zM11 12a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-2xl mb-2">Back-End</h3>
+                    <p class="text-gray-600">Программирование функционала и безопасность</p>
+                </div>
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-indigo-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        Интеграция CMS/CRM
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-indigo-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        Программирование функций
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="h-5 w-5 text-indigo-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                        Меры безопасности
+                    </li>
+                </ul>
+                <div class="text-center font-bold text-2xl">250 000 ₽</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Interactive Calculator Section -->
+<section id="calculator" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Интерактивный калькулятор</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Выберите необходимые услуги, чтобы рассчитать стоимость
+                проекта</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 max-w-4xl mx-auto">
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4">Базовые услуги</h3>
+
+                <!-- Дизайн (раскрывающийся список) -->
+                <div class="mb-4 border rounded-lg overflow-hidden">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 cursor-pointer service-toggle"
+                         data-target="design-details">
+                        <div class="flex items-center">
+                            <input type="checkbox" class="checkbox-input" data-service="design" data-price="150000"
+                                   checked>
+                            <div class="checkbox-custom flex items-center justify-center">
+                                <div class="checkmark"></div>
+                            </div>
+                            <span class="font-medium">Дизайн <span class="text-gray-500 ml-2">150 000 ₽</span></span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-5 w-5 transform transition-transform service-arrow" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="h-0 overflow-hidden transition-all duration-300 service-details" id="design-details">
+                        <div class="p-4 bg-white border-t">
+                            <div class="space-y-3">
+                                <label class="checkbox-label flex items-center">
+                                    <input type="checkbox" class="checkbox-input" data-parent="design"
+                                           data-subservice="ui-ux" data-price="70000" checked>
+                                    <div class="checkbox-custom flex items-center justify-center">
+                                        <div class="checkmark"></div>
+                                    </div>
+                                    <span>UI/UX дизайн <span class="text-gray-500 ml-2">70 000 ₽</span></span>
+                                </label>
+                                <label class="checkbox-label flex items-center">
+                                    <input type="checkbox" class="checkbox-input" data-parent="design"
+                                           data-subservice="prototyping" data-price="50000" checked>
+                                    <div class="checkbox-custom flex items-center justify-center">
+                                        <div class="checkmark"></div>
+                                    </div>
+                                    <span>Прототипирование <span class="text-gray-500 ml-2">50 000 ₽</span></span>
+                                </label>
+                                <label class="checkbox-label flex items-center">
+                                    <input type="checkbox" class="checkbox-input" data-parent="design"
+                                           data-subservice="branding" data-price="30000" checked>
+                                    <div class="checkbox-custom flex items-center justify-center">
+                                        <div class="checkmark"></div>
+                                    </div>
+                                    <span>Брендирование <span class="text-gray-500 ml-2">30 000 ₽</span></span>
+                                </label>
+                            </div>
+                            <div class="mt-3 text-sm text-gray-600">
+                                <p>Включает разработку уникального дизайна всех страниц сайта, создание прототипов
+                                    интерфейса и адаптацию под фирменный стиль клиники.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Front-End (раскрывающийся список) -->
+                <div class="mb-4 border rounded-lg overflow-hidden">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 cursor-pointer service-toggle"
+                         data-target="frontend-details">
+                        <div class="flex items-center">
+                            <input type="checkbox" class="checkbox-input" data-service="frontend" data-price="100000"
+                                   checked>
+                            <div class="checkbox-custom flex items-center justify-center">
+                                <div class="checkmark"></div>
+                            </div>
+                            <span class="font-medium">Front-End <span class="text-gray-500 ml-2">100 000 ₽</span></span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-5 w-5 transform transition-transform service-arrow" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="h-0 overflow-hidden transition-all duration-300 service-details" id="frontend-details">
+                        <div class="p-4 bg-white border-t">
+                            <div class="space-y-3">
+                                <label class="checkbox-label flex items-center">
+                                    <input type="checkbox" class="checkbox-input" data-parent="frontend"
+                                           data-subservice="adaptive" data-price="40000" checked>
+                                    <div class="checkbox-custom flex items-center justify-center">
+                                        <div class="checkmark"></div>
+                                    </div>
+                                    <span>Адаптивная верстка <span class="text-gray-500 ml-2">40 000 ₽</span></span>
+                                </label>
+                                <label class="checkbox-label flex items-center">
+                                    <input type="checkbox" class="checkbox-input" data-parent="frontend"
+                                           data-subservice="interactive" data-price="35000" checked>
+                                    <div class="checkbox-custom flex items-center justify-center">
+                                        <div class="checkmark"></div>
+                                    </div>
+                                    <span>Интерактивные элементы <span class="text-gray-500 ml-2">35 000 ₽</span></span>
+                                </label>
+                                <label class="checkbox-label flex items-center">
+                                    <input type="checkbox" class="checkbox-input" data-parent="frontend"
+                                           data-subservice="optimization" data-price="25000" checked>
+                                    <div class="checkbox-custom flex items-center justify-center">
+                                        <div class="checkmark"></div>
+                                    </div>
+                                    <span>Оптимизация скорости <span class="text-gray-500 ml-2">25 000 ₽</span></span>
+                                </label>
+                            </div>
+                            <div class="mt-3 text-sm text-gray-600">
+                                <p>Верстка всех страниц сайта с адаптацией под различные устройства (компьютер, планшет,
+                                    смартфон), создание анимаций и интерактивных элементов.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Back-End (раскрывающийся список) -->
+                <div class="mb-4 border rounded-lg overflow-hidden">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 cursor-pointer service-toggle"
+                         data-target="backend-details">
+                        <div class="flex items-center">
+                            <input type="checkbox" class="checkbox-input" data-service="backend" data-price="250000"
+                                   checked>
+                            <div class="checkbox-custom flex items-center justify-center">
+                                <div class="checkmark"></div>
+                            </div>
+                            <span class="font-medium">Back-End <span class="text-gray-500 ml-2">250 000 ₽</span></span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-5 w-5 transform transition-transform service-arrow" viewBox="0 0 20 20"
+                             fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="h-0 overflow-hidden transition-all duration-300 service-details" id="backend-details">
+                        <div class="p-4 bg-white border-t">
+                            <div class="space-y-3">
+                                <label class="checkbox-label flex items-center">
+                                    <input type="checkbox" class="checkbox-input" data-parent="backend"
+                                           data-subservice="cms-crm" data-price="100000" checked>
+                                    <div class="checkbox-custom flex items-center justify-center">
+                                        <div class="checkmark"></div>
+                                    </div>
+                                    <span>Интеграция CMS/CRM <span class="text-gray-500 ml-2">100 000 ₽</span></span>
+                                </label>
+                                <label class="checkbox-label flex items-center">
+                                    <input type="checkbox" class="checkbox-input" data-parent="backend"
+                                           data-subservice="programming" data-price="90000" checked>
+                                    <div class="checkbox-custom flex items-center justify-center">
+                                        <div class="checkmark"></div>
+                                    </div>
+                                    <span>Программирование функций <span
+                                            class="text-gray-500 ml-2">90 000 ₽</span></span>
+                                </label>
+                                <label class="checkbox-label flex items-center">
+                                    <input type="checkbox" class="checkbox-input" data-parent="backend"
+                                           data-subservice="security" data-price="60000" checked>
+                                    <div class="checkbox-custom flex items-center justify-center">
+                                        <div class="checkmark"></div>
+                                    </div>
+                                    <span>Меры безопасности <span class="text-gray-500 ml-2">60 000 ₽</span></span>
+                                </label>
+                            </div>
+                            <div class="mt-3 text-sm text-gray-600">
+                                <p>Разработка серверной части сайта, интеграция системы управления контентом,
+                                    программирование всех функций, настройка защиты данных.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4">Дополнительные возможности</h3>
+                <div class="space-y-2">
+                    <label class="checkbox-label flex items-center">
+                        <input type="checkbox" class="checkbox-input" data-service="payment" data-price="30000">
+                        <div class="checkbox-custom flex items-center justify-center">
+                            <div class="checkmark"></div>
+                        </div>
+                        <span>Платежные системы <span class="text-gray-500 ml-2">30 000 ₽</span></span>
+                    </label>
+                    <label class="checkbox-label flex items-center">
+                        <input type="checkbox" class="checkbox-input" data-service="telemedicine" data-price="250000">
+                        <div class="checkbox-custom flex items-center justify-center">
+                            <div class="checkmark"></div>
+                        </div>
+                        <span>Телемедицина <span class="text-gray-500 ml-2">250 000 ₽</span></span>
+                    </label>
+                    <label class="checkbox-label flex items-center">
+                        <input type="checkbox" class="checkbox-input" data-service="seo" data-price="50000">
+                        <div class="checkbox-custom flex items-center justify-center">
+                            <div class="checkmark"></div>
+                        </div>
+                        <span>SEO-оптимизация <span class="text-gray-500 ml-2">50 000 ₽</span></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="languages">
+                <h3 class="text-xl font-semibold mb-4">Перевод на дополнительные языки</h3>
+                <p class="text-gray-600 mb-4">Грузинский и английский языки уже включены в базовую стоимость</p>
+
+                <div class="mb-6">
+                    <div class="language-pill" data-language="russian" data-price="175000">
+                        Русский
+                    </div>
+                    <div class="language-pill" data-language="arabic" data-price="190000">
+                        Арабский
+                    </div>
+                    <div class="language-pill" data-language="chinese" data-price="160000">
+                        Китайский
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t pt-6 mt-6">
+                <div class="flex justify-between items-center text-xl font-semibold">
+                    <span>Итоговая стоимость:</span>
+                    <span id="total-price" class="text-indigo-600">500 000 ₽</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-16 bg-indigo-600 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-6">Готовы начать проект?</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">Свяжитесь с нами для уточнения деталей и мы подготовим для вас
+            индивидуальное предложение</p>
+        <a href="https://t.me/amoraroma" target="_blank"
+           class="inline-block bg-white text-indigo-600 hover:bg-indigo-100 px-8 py-3 rounded-lg font-medium shadow-lg transition-all">
+            Написать в Telegram
+        </a>
+    </div>
+</section>
+
+<!-- Floating UI -->
+<div class="fixed bottom-6 right-6 z-50 transition-all duration-300 transform hover:scale-105" id="floating-ui">
+    <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+        <!-- Collapsed View -->
+        <div class="flex items-center justify-between bg-indigo-600 text-white p-4 cursor-pointer" id="floating-header">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                </svg>
+                <div>
+                    <div class="text-sm font-medium">Ваш проект</div>
+                    <div id="floating-price" class="text-xl font-bold">500 000 ₽</div>
+                </div>
+            </div>
+            <div class="ml-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform duration-300"
+                     id="toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Expanded Content -->
+        <div class="h-0 overflow-hidden transition-all duration-300" id="floating-content">
+            <div class="p-4 bg-white">
+                <h3 class="font-semibold text-gray-800 mb-2">Выбранные услуги:</h3>
+
+                <div class="mb-3">
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Базовая разработка</span>
+                        <span>500 000 ₽</span>
+                    </div>
+                    <div class="text-xs text-gray-500">Дизайн, Front-End, Back-End</div>
+                </div>
+
+                <div id="selected-services" class="mb-3">
+                    <!-- Заполняется JS -->
+                </div>
+
+                <div id="selected-languages" class="mb-3">
+                    <!-- Заполняется JS -->
+                </div>
+
+                <div class="border-t pt-2 mb-2">
+                    <div class="flex justify-between font-semibold">
+                        <span>Итого:</span>
+                        <span id="floating-total" class="text-indigo-600">500 000 ₽</span>
+                    </div>
+                </div>
+
+                <a href="https://t.me/amoraroma" target="_blank"
+                   class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center py-2 rounded-lg transition-colors duration-300">
+                    Получить предложение
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Variables for price tracking
+        let totalPrice = 0;
+        let selectedLanguages = [];
+        let serviceState = {
+            design: {checked: true, price: 150000, subservices: {}},
+            frontend: {checked: true, price: 100000, subservices: {}},
+            backend: {checked: true, price: 250000, subservices: {}}
+        };
+
+        // Get DOM elements
+        const totalPriceElement = document.getElementById('total-price');
+        const floatingPriceElement = document.getElementById('floating-price');
+        const floatingTotalElement = document.getElementById('floating-total');
+        const additionalServicesCheckboxes = document.querySelectorAll('input[data-service]:not([data-parent])');
+        const subserviceCheckboxes = document.querySelectorAll('input[data-parent]');
+        const languagePills = document.querySelectorAll('.language-pill');
+        const floatingHeader = document.getElementById('floating-header');
+        const floatingContent = document.getElementById('floating-content');
+        const toggleIcon = document.getElementById('toggle-icon');
+        const selectedServicesContainer = document.getElementById('selected-services');
+        const selectedLanguagesContainer = document.getElementById('selected-languages');
+        const serviceToggles = document.querySelectorAll('.service-toggle');
+
+        // Format price function
+        function formatPrice(price) {
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " ₽";
+        }
+
+        // Set up toggle handlers for service details sections
+        serviceToggles.forEach(toggle => {
+            toggle.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                const arrowElement = this.querySelector('.service-arrow');
+
+                if (targetElement.style.height === 'auto' ||
+                    targetElement.style.height === targetElement.scrollHeight + 'px') {
+                    targetElement.style.height = '0';
+                    arrowElement.classList.remove('rotate-180');
+                } else {
+                    targetElement.style.height = 'auto';
+                    const height = targetElement.scrollHeight + 'px';
+                    targetElement.style.height = height;
+                    arrowElement.classList.add('rotate-180');
+                }
+            });
+        });
+
+        // Calculate initial price
+        function calculateInitialPrice() {
+            totalPrice = 0;
+
+            // Add prices of checked main services
+            additionalServicesCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const serviceName = checkbox.dataset.service;
+                    const servicePrice = parseInt(checkbox.dataset.price);
+
+                    if (['design', 'frontend', 'backend'].includes(serviceName)) {
+                        serviceState[serviceName] = {
+                            checked: true,
+                            price: servicePrice,
+                            subservices: {}
+                        };
+                    }
+
+                    totalPrice += servicePrice;
+                }
+            });
+
+            // Add prices of checked subservices
+            subserviceCheckboxes.forEach(checkbox => {
+                const parentService = checkbox.dataset.parent;
+                const subservice = checkbox.dataset.subservice;
+                const subservicePrice = parseInt(checkbox.dataset.price);
+
+                if (serviceState[parentService] && serviceState[parentService].subservices) {
+                    serviceState[parentService].subservices[subservice] = {
+                        checked: checkbox.checked,
+                        price: subservicePrice
+                    };
+                }
+            });
+
+            // Add prices of selected languages
+            languagePills.forEach(pill => {
+                if (pill.classList.contains('active')) {
+                    const language = pill.dataset.language;
+                    const languagePrice = parseInt(pill.dataset.price);
+                    selectedLanguages.push(language);
+                    totalPrice += languagePrice;
+                }
+            });
+
+            updatePrices();
+        }
+
+        // Update displayed prices
+        function updatePrices() {
+            totalPriceElement.textContent = formatPrice(totalPrice);
+            floatingPriceElement.textContent = formatPrice(totalPrice);
+            floatingTotalElement.textContent = formatPrice(totalPrice);
+            updateFloatingUI();
+        }
+
+        // Toggle floating UI
+        let isFloatingUiExpanded = false;
+
+        floatingHeader.addEventListener('click', function () {
+            isFloatingUiExpanded = !isFloatingUiExpanded;
+
+            if (isFloatingUiExpanded) {
+                floatingContent.style.height = 'auto';
+                const height = floatingContent.scrollHeight + 'px';
+                floatingContent.style.height = height;
+                toggleIcon.classList.add('rotate-180');
+            } else {
+                floatingContent.style.height = '0';
+                toggleIcon.classList.remove('rotate-180');
+            }
+        });
+
+        // Function to update service state and price when a main service checkbox changes
+        function handleMainServiceChange(checkbox) {
+            const serviceName = checkbox.dataset.service;
+            const servicePrice = parseInt(checkbox.dataset.price);
+            const isChecked = checkbox.checked;
+
+            if (!['design', 'frontend', 'backend'].includes(serviceName)) {
+                // Для дополнительных услуг просто пересчитываем цену
+                if (isChecked) {
+                    totalPrice += servicePrice;
+                } else {
+                    totalPrice -= servicePrice;
+                }
+                updatePrices();
+                return;
+            }
+
+            // Update service state
+            serviceState[serviceName].checked = isChecked;
+
+            // Update related subservice checkboxes
+            const subserviceCheckboxes = document.querySelectorAll(`input[data-parent="${serviceName}"]`);
+            subserviceCheckboxes.forEach(subCheckbox => {
+                subCheckbox.disabled = !isChecked;
+                if (!isChecked) {
+                    subCheckbox.checked = false;
+                } else {
+                    subCheckbox.checked = true;
+                }
+
+                const subserviceName = subCheckbox.dataset.subservice;
+                if (serviceState[serviceName].subservices[subserviceName]) {
+                    serviceState[serviceName].subservices[subserviceName].checked = subCheckbox.checked;
+                }
+            });
+
+            // Recalculate total price
+            recalculateTotalPrice();
+        }
+
+        // Function to update service state and price when a subservice checkbox changes
+        function handleSubserviceChange(checkbox) {
+            const parentService = checkbox.dataset.parent;
+            const subservice = checkbox.dataset.subservice;
+            const isChecked = checkbox.checked;
+
+            // Update service state
+            if (serviceState[parentService] &&
+                serviceState[parentService].subservices &&
+                serviceState[parentService].subservices[subservice]) {
+                serviceState[parentService].subservices[subservice].checked = isChecked;
+            }
+
+            // Recalculate total price
+            recalculateTotalPrice();
+        }
+
+        // Recalculate total price based on service state
+        function recalculateTotalPrice() {
+            totalPrice = 0;
+
+            // Calculate price for each main service
+            for (const serviceName in serviceState) {
+                const service = serviceState[serviceName];
+
+                if (service.checked) {
+                    // For main services that are checked, use the sum of the checked subservices
+                    let serviceTotal = 0;
+                    let allSubservicesUnchecked = true;
+
+                    for (const subserviceName in service.subservices) {
+                        const subservice = service.subservices[subserviceName];
+                        if (subservice.checked) {
+                            serviceTotal += subservice.price;
+                            allSubservicesUnchecked = false;
+                        }
+                    }
+
+                    // If all subservices are unchecked but the main service is checked,
+                    // use the main service price
+                    if (allSubservicesUnchecked) {
+                        serviceTotal = service.price;
+                    }
+
+                    totalPrice += serviceTotal;
+                }
+            }
+
+            // Add prices of additional services
+            additionalServicesCheckboxes.forEach(checkbox => {
+                const serviceName = checkbox.dataset.service;
+                if (checkbox.checked && !['design', 'frontend', 'backend'].includes(serviceName)) {
+                    totalPrice += parseInt(checkbox.dataset.price);
+                }
+            });
+
+            // Add prices of selected languages
+            languagePills.forEach(pill => {
+                if (pill.classList.contains('active')) {
+                    totalPrice += parseInt(pill.dataset.price);
+                }
+            });
+
+            // Update UI
+            updatePrices();
+        }
+
+        // Add event listeners to main service checkboxes
+        additionalServicesCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                handleMainServiceChange(this);
+            });
+        });
+
+        // Add event listeners to subservice checkboxes
+        subserviceCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                handleSubserviceChange(this);
+            });
+        });
+
+        // Add event listeners to language pills
+        languagePills.forEach(pill => {
+            pill.addEventListener('click', function () {
+                const language = this.dataset.language;
+                const languagePrice = parseInt(this.dataset.price);
+
+                if (this.classList.contains('active')) {
+                    // Remove language
+                    this.classList.remove('active');
+                    selectedLanguages = selectedLanguages.filter(lang => lang !== language);
+                    totalPrice -= languagePrice;
+                } else {
+                    // Add language
+                    this.classList.add('active');
+                    selectedLanguages.push(language);
+                    totalPrice += languagePrice;
+                }
+
+                updatePrices();
+            });
+        });
+
+        // Update floating UI with selected services
+        function updateFloatingUI() {
+            // Update selected services list
+            selectedServicesContainer.innerHTML = '';
+
+            // Add main services and their checked subservices
+            for (const serviceName in serviceState) {
+                const service = serviceState[serviceName];
+
+                if (service.checked) {
+                    // Check if any subservices are checked
+                    let hasCheckedSubservices = false;
+                    for (const subserviceName in service.subservices) {
+                        if (service.subservices[subserviceName].checked) {
+                            hasCheckedSubservices = true;
+                            break;
+                        }
+                    }
+
+                    // Add main service heading
+                    const serviceHeading = document.createElement('div');
+                    serviceHeading.classList.add('text-sm', 'font-medium', 'mt-2', 'mb-1');
+
+                    let serviceDisplay = '';
+                    switch (serviceName) {
+                        case 'design':
+                            serviceDisplay = 'Дизайн';
+                            break;
+                        case 'frontend':
+                            serviceDisplay = 'Front-End';
+                            break;
+                        case 'backend':
+                            serviceDisplay = 'Back-End';
+                            break;
+                        default:
+                            serviceDisplay = serviceName;
+                    }
+
+                    serviceHeading.textContent = serviceDisplay;
+                    selectedServicesContainer.appendChild(serviceHeading);
+
+                    // Add checked subservices or main service if all subservices unchecked
+                    if (hasCheckedSubservices) {
+                        for (const subserviceName in service.subservices) {
+                            const subservice = service.subservices[subserviceName];
+                            if (subservice.checked) {
+                                let subserviceDisplay = '';
+
+                                // Map subservice names to display names
+                                switch (subserviceName) {
+                                    case 'ui-ux':
+                                        subserviceDisplay = 'UI/UX дизайн';
+                                        break;
+                                    case 'prototyping':
+                                        subserviceDisplay = 'Прототипирование';
+                                        break;
+                                    case 'branding':
+                                        subserviceDisplay = 'Брендирование';
+                                        break;
+                                    case 'adaptive':
+                                        subserviceDisplay = 'Адаптивная верстка';
+                                        break;
+                                    case 'interactive':
+                                        subserviceDisplay = 'Интерактивные элементы';
+                                        break;
+                                    case 'optimization':
+                                        subserviceDisplay = 'Оптимизация скорости';
+                                        break;
+                                    case 'cms-crm':
+                                        subserviceDisplay = 'Интеграция CMS/CRM';
+                                        break;
+                                    case 'programming':
+                                        subserviceDisplay = 'Программирование функций';
+                                        break;
+                                    case 'security':
+                                        subserviceDisplay = 'Меры безопасности';
+                                        break;
+                                    default:
+                                        subserviceDisplay = subserviceName;
+                                }
+
+                                const subserviceElement = document.createElement('div');
+                                subserviceElement.classList.add('flex', 'justify-between', 'text-xs', 'text-gray-600', 'mb-1', 'pl-2');
+                                subserviceElement.innerHTML = `
+                                        <span>${subserviceDisplay}</span>
+                                        <span>${formatPrice(subservice.price)}</span>
+                                    `;
+                                selectedServicesContainer.appendChild(subserviceElement);
+                            }
+                        }
+                    } else {
+                        const serviceElement = document.createElement('div');
+                        serviceElement.classList.add('flex', 'justify-between', 'text-xs', 'text-gray-600', 'mb-1', 'pl-2');
+                        serviceElement.innerHTML = `
+                                <span>Полный пакет</span>
+                                <span>${formatPrice(service.price)}</span>
+                            `;
+                        selectedServicesContainer.appendChild(serviceElement);
+                    }
+                }
+            }
+
+            // Add additional services
+            additionalServicesCheckboxes.forEach(checkbox => {
+                if (checkbox.checked && !['design', 'frontend', 'backend'].includes(checkbox.dataset.service)) {
+                    const servicePrice = parseInt(checkbox.dataset.price);
+                    const serviceNameText = checkbox.parentElement.querySelector('span').textContent.split(' ')[0];
+
+                    const serviceElement = document.createElement('div');
+                    serviceElement.classList.add('flex', 'justify-between', 'text-sm', 'font-medium', 'mt-2', 'mb-1');
+                    serviceElement.innerHTML = `
+                            <span>${serviceNameText}</span>
+                            <span>${formatPrice(servicePrice)}</span>
+                        `;
+                    selectedServicesContainer.appendChild(serviceElement);
+                }
+            });
+
+            // Update selected languages list
+            selectedLanguagesContainer.innerHTML = '';
+            if (selectedLanguages.length > 0) {
+                const languageHeader = document.createElement('div');
+                languageHeader.classList.add('text-sm', 'font-medium', 'mt-3', 'mb-1');
+                languageHeader.textContent = 'Языки:';
+                selectedLanguagesContainer.appendChild(languageHeader);
+
+                languagePills.forEach(pill => {
+                    if (pill.classList.contains('active')) {
+                        const languagePrice = parseInt(pill.dataset.price);
+                        const languageName = pill.textContent.trim();
+
+                        const languageElement = document.createElement('div');
+                        languageElement.classList.add('flex', 'justify-between', 'text-sm', 'mb-1');
+                        languageElement.innerHTML = `
+                                <span>${languageName}</span>
+                                <span>${formatPrice(languagePrice)}</span>
+                            `;
+                        selectedLanguagesContainer.appendChild(languageElement);
+                    }
+                });
+            }
+
+            // Update height if expanded
+            if (isFloatingUiExpanded) {
+                setTimeout(() => {
+                    floatingContent.style.height = 'auto';
+                    const height = floatingContent.scrollHeight + 'px';
+                    floatingContent.style.height = height;
+                }, 10);
+            }
+        }
+
+        // Initialize the UI
+        calculateInitialPrice();
+    });
+</script>
+</body>
+</html>
